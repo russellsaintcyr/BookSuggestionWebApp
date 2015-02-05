@@ -29,6 +29,6 @@ mvn tomcat7:run
 ... or if you have heroku toolkit ...
 foreman start
 ```
-Test URL: https://book-suggestion-webapp.herokuapp.com.
+Heroku URL: https://book-suggestion-webapp.herokuapp.com.
 
 The data source currently contains only 106 books.
