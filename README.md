@@ -1,6 +1,6 @@
 # Book Suggestion Web App
 
-Users state what sort of books they like the most, ranking their preferences in importance. Preferences can be author name (partial name search, case-insensitive, UTF-8 support), a specific genre, a range of years, and a range of pages.
+Users state what types of books they prefer, ranking their preferences by importance. Preferences can be author name (partial name search, case-insensitive, UTF-8 support), a specific genre, a range of years, and a range of pages.
 
 ### Single Preferences
 Let's take an example for a user who likes the author Kafka, with no other preferences. Our data source is quite limited, so we have few details about Kafka to use to recommend other books. The app queries the author's published genres and years of publication. The data shows that Kafka wrote in the genres of Comedy, Suspense and Science Fiction, and that his books were published from 1925-1952. The app offsets the year range by 25 years in either direction, to allow more flexibility in the suggestions. This returns a list of 22 books which can be [viewed here](https://book-suggestion-webapp.herokuapp.com/suggestions?preference1=Author&author=Kafka). This list is sorted by rating high to low, and sub-sorted by author's first name A-Z.
@@ -11,7 +11,7 @@ For other single-preference searches, the app does a simple search for that pref
  * Number of Pages: [Books under 500 pages](https://book-suggestion-webapp.herokuapp.com/suggestions?preference1=Pages&minPages=0&maxPages=500)
 
 ### Multiple Preferences
-For multiple preferences, the logic is trickier, and depends on the combination of the result sets. 
+For multiple preferences the logic is trickier since it depends on the unique combination of preferences. Due to the complexity of search results, currently only two preferences are supported. 
  * Author & Pages: [Kafka with page limit of 500](https://book-suggestion-webapp.herokuapp.com/suggestions?preference1=Author&preference2=Pages&author=Kafka&minPages=0&maxPages=400). The result set of Kafka's 3 genres and 1925-1952 is filtered to exclude books over 500 pages.
  * Author & Year: [Kafka with year of 1900](https://book-suggestion-webapp.herokuapp.com/suggestions?preference1=Author&preference2=Years&author=Kafka&minYear=1900&maxYear=1900). The result set of Kafka's 3 genres and 1925-1952 is sorted by years closest to 1900.
  * Author & Genre: [Kafka with genre of Suspense](https://book-suggestion-webapp.herokuapp.com/suggestions?preference1=Author&preference2=Genre&author=Kafka&genre=Suspense). The result set of Kafka's 3 genres and 1925-1952 is sorted first by Suspense novels, then the other genres. If the preferred genre is not one of Kafka's genres, then no results are returned.
