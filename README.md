@@ -12,18 +12,18 @@ For other single-preference searches, the app does a simple search for that pref
 
 ### Multiple Preferences
 For multiple preferences the logic is trickier since it depends on the unique combination of preferences. Due to the complexity of search results, currently only two preferences are supported. 
- * Author & Pages: [Kafka with a max page of 500](https://book-suggestion-webapp.herokuapp.com/suggestions?preference1=Author&preference2=Pages&author=Kafka&minPages=0&maxPages=500). The result set of Kafka's 3 genres and 1900-1977 is sorted by pages closest to 500.
- * Author & Year: [Kafka with year of 1920](https://book-suggestion-webapp.herokuapp.com/suggestions?preference1=Author&preference2=Years&author=Kafka&minYear=1920&maxYear=1920). The result set of Kafka's 3 genres and 1900-1977 is sorted by years closest to 1920.
+ * Author & Pages: [Kafka with a max page of 500](https://book-suggestion-webapp.herokuapp.com/suggestions?preference1=Author&preference2=Pages&author=Kafka&minPages=0&maxPages=500). The result set of Kafka's 3 genres and 1900-1977, sorted by pages closest to 500.
+ * Author & Year: [Kafka with year of 1920](https://book-suggestion-webapp.herokuapp.com/suggestions?preference1=Author&preference2=Years&author=Kafka&minYear=1920&maxYear=1920). The result set of Kafka's 3 genres and 1900-1977, sorted by years closest to 1920.
  * Author & Genre: Kafka with genre of Suspense. The result set of Kafka's 3 genres and 1900-1977 is sorted first by Suspense novels, then the other genres. If the preferred genre is not one of Kafka's genres, then no results are returned.
- * Genre & Author: TBD 
- * Genre & Year: TBD 
- * Genre & Pages: TBD
- * Year & Author: TBD 
- * Year & Genre: TBD 
- * Year & Pages: TBD 
- * Pages & Year: TBD
- * Pages & Genre: TBD
- * Pages & Author: TBD
+ * Genre & Author: Suspense and Kafka. The user has made genre the priority, so only show that genre, not all Kafka's genres. But Kafka is a secondary preference so we filter our books from Kafka's time period. 
+ * Genre & Year: Only show the selected genre. Sort by the average of the years entered.
+ * Genre & Pages: Only show the selected genre. Sort by the average of the pages entered.
+ * Year & Author: Only show books in the selected year range, filtered by the author's genres and year range. Sort by rating.
+ * Year & Genre: Only show books in the selected year range, filtered by selected genre. Sort by rating.
+ * Year & Pages: Only show books in the selected year range. Sort by the average of the pages entered.
+ * Pages & Year: Only show books in the selected page range. Sort by the average of the years entered.
+ * Pages & Genre: Only show books in the selected page range, filtered by selected genre. Sort by rating.
+ * Pages & Author: Only show books in the selected page range, filtered by the author's genres and year range. Sort by rating.
 
 The data source currently contains only 106 books which can be [viewed here](https://book-suggestion-webapp.herokuapp.com/books).
 
