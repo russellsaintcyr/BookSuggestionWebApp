@@ -14,13 +14,16 @@ For multiple preferences, the logic is trickier. TBD
  * Author & Genre
  * Author & Pages
 
-Made with:
+The data source currently contains only 106 books which can be [viewed here](https://book-suggestion-webapp.herokuapp.com/books).
+
+### App Technical Details
   * Spring MVC
   * AngularJS
   * Embedded Tomcat with tomcat7-maven-plugin
   * Hibernate data modeling from a CSV source, loaded into an H2 in-memory database
   * Internationalization (i18n)
 
+### Build, Test and Execute
 Maven command to build: `mvn package`. This will run the unit tests and create an executable jar `BookSuggestionWebApp-1.0-SNAPSHOT-war-exec.jar`. You can then run the up with one of the commands below.
 ```
 java -jar target/BookSuggestionWebApp-1.0-SNAPSHOT-war-exec.jar
@@ -29,6 +32,3 @@ mvn tomcat7:run
 ... or if you have heroku toolkit ...
 foreman start
 ```
-Heroku URL: https://book-suggestion-webapp.herokuapp.com.
-
-The data source currently contains only 106 books which can be [viewed here](https://book-suggestion-webapp.herokuapp.com/books).
