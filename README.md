@@ -27,7 +27,7 @@ For multiple preferences the logic is trickier since it depends on the unique co
 
 The data source currently contains only 106 books which can be [viewed here](https://book-suggestion-webapp.herokuapp.com/books).
 
-### App Technical Details
+### App Implementation Details
   * Spring MVC
   * AngularJS
   * Embedded Tomcat with tomcat7-maven-plugin
