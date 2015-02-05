@@ -24,7 +24,7 @@ The data source currently contains only 106 books which can be [viewed here](htt
   * Internationalization (i18n)
 
 ### Build, Test and Execute
-Maven command to build: `mvn package`. This will run the unit tests and create an executable jar `BookSuggestionWebApp-1.0-SNAPSHOT-war-exec.jar`. You can then run the up with one of the commands below.
+Maven command to build: `mvn package`. This will run the unit tests and create an executable jar `BookSuggestionWebApp-1.0-SNAPSHOT-war-exec.jar`. You can then run the app with one of the commands below.
 ```
 java -jar target/BookSuggestionWebApp-1.0-SNAPSHOT-war-exec.jar
 ... or ...
