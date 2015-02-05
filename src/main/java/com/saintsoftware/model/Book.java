@@ -18,6 +18,17 @@ public class Book {
     public static enum GENRES {
 		Action, Adventure, Comedy, Drama, History, Horror, Science_Fiction, Suspense, Thriller
     }
+    
+	public Book() {}
+	
+	public Book(Object[] objBook) {
+		this.title = (String) objBook[2];
+		this.author = (String) objBook[3];
+		this.genre = (String) objBook[4];
+		this.rating = (int) objBook[5];
+		this.pages = (int) objBook[6];
+		this.year = (int) objBook[7];
+	}
 	/**
 	 * @return the iD
 	 */

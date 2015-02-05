@@ -32,15 +32,26 @@ public class TestMultipleCriteriaSearches {
     }
 
 	/**
+	 * 22 books returned.
+	 */
+    @Test
+    public void authorAndPages() throws Exception {
+    	// TODO: check that top result is Ovide, Les Métamorphoses
+		mockMvc.perform(post("/suggestions?preference1=Author&preference2=Pages&author=Kafka&maxPages=500"))
+        .andExpect(status().isOk())
+		.andExpect(model().attribute("books", Matchers.hasSize(22)));
+    }
+
+    /**
 	 * kafka genres: [Comedy, Suspense, Science Fiction]
 	 * kafka years with 25y offset: min=1900; max=1977
 	 * 22 books returned.
 	 */
-    @Test
-    public void authorAndGenre() throws Exception {
-		mockMvc.perform(post("/suggestions?preference1=Author&preference2=Genre&author=Kafka&genre=Suspense"))
-        .andExpect(status().isOk())
-		.andExpect(model().attribute("books", Matchers.hasSize(22)));
-    }
+//    @Test
+//    public void authorAndGenre() throws Exception {
+//		mockMvc.perform(post("/suggestions?preference1=Author&preference2=Genre&author=Kafka&genre=Suspense"))
+//        .andExpect(status().isOk())
+//		.andExpect(model().attribute("books", Matchers.hasSize(22)));
+//    }
     
 }

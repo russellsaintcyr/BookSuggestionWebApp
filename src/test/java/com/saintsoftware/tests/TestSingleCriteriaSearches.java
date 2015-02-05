@@ -32,13 +32,25 @@ public class TestSingleCriteriaSearches {
     }
 
 	/**
+	 * Homère genres: [Comedy, Suspense, Science Fiction]
+	 * Homère years with 25y offset: min=1900; max=1977
+	 * 23 books returned.
+	 */
+    @Test
+    public void authorOnlyUTF8() throws Exception {
+		mockMvc.perform(post("/suggestions?preference1=Author&author=Homère"))
+        .andExpect(status().isOk())
+		.andExpect(model().attribute("books", Matchers.hasSize(23)));
+    }
+
+    /**
 	 * kafka genres: [Comedy, Suspense, Science Fiction]
 	 * kafka years with 25y offset: min=1900; max=1977
 	 * 22 books returned.
 	 */
     @Test
     public void authorOnly() throws Exception {
-		mockMvc.perform(post("/suggestions?preference1=Author&author=kafka"))
+		mockMvc.perform(post("/suggestions?preference1=Author&author=Kafka"))
         .andExpect(status().isOk())
 		.andExpect(model().attribute("books", Matchers.hasSize(22)));
     }

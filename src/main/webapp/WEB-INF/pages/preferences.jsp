@@ -12,7 +12,7 @@
 <body ng-app="setPreferences">
 	<div ng-controller="SearchController">
 	<h1><spring:message code="preferences.header" text="preferences.header"/></h1>
-	<form:form action="suggestions" method="get" commandName="searchForm" acceptCharset="utf-8" ng-submit="form.$valid && submit()" name="form">
+	<form:form action="suggestions" method="post" commandName="searchForm" acceptCharset="utf-8" ng-submit="form.$valid && submit()" name="form">
 		<table border="0">
 		<tr>
 		<td id="divPrefs">

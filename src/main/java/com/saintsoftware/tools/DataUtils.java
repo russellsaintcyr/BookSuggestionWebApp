@@ -1,5 +1,6 @@
 package com.saintsoftware.tools;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -21,11 +22,37 @@ public class DataUtils {
 	private final static int yearOffset = 25;
 
 	public static void main(String[] args) {
+		try {
+			testGetSuggestions();
+			// Hibernate: select this_.ID as ID1_0_0_, this_.AUTHOR as AUTHOR2_0_0_, this_.GENRE as GENRE3_0_0_, this_.PAGES as PAGES4_0_0_, this_.RATING as RATING5_0_0_, this_.TITLE as TITLE6_0_0_, this_.YEAR as YEAR7_0_0_ from Books this_ where this_.GENRE in (?, ?, ?) and this_.YEAR between ? and ?
+			//String sql = "select ABS(pages - 500) AS pagediff,ID,title,author,genre,rating, pages,year from Book where GENRE in ('Comedy', 'Suspense', 'Science Fiction') and YEAR between 1900 and 1970 ORDER BY pagediff asc";
+			//testQuery(sql);
+		} finally {
+			// close your thread when testing!
+			HibernateUtil.shutdown();
+		}
+	}
+
+	@SuppressWarnings("unused")
+	private static void testQuery(String qs) {
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		List<Object[]> results = session.createQuery(qs).list();
+		List<Book> books = convertToBookList(results);
+		if (books != null) {
+			for (Book book : books) {
+				logger.debug(book.toString());
+			}
+			logger.debug(results.size() + " books returned.");
+		}
+	}
+
+	private static void testGetSuggestions() {
 		SearchCriteria sc = new SearchCriteria();
-		sc.setMinPages("200");
-		sc.setMaxPages("400");
-		sc.setPreference1(SearchCriteria.Preferences.Pages);
-		// sc.setPreference2(SearchCriteria.Preferences.Years);
+		sc.setMinPages("0");
+		sc.setMaxPages("500");
+		sc.setAuthor("kafka");
+		sc.setPreference1(SearchCriteria.Preferences.Author);
+		sc.setPreference2(SearchCriteria.Preferences.Pages);
 		List<Book> books = DataUtils.getSuggestions(sc);
 		if (books != null) {
 			for (Book book : books) {
@@ -106,6 +133,7 @@ public class DataUtils {
 				debug(sc, "preference1=author but author is empty");
 			} else {
 				List<String> authorGenres = getAuthorGenres(sc, session);
+				System.out.println(authorGenres);
 				// exit if no results
 				if (authorGenres.size() == 0) return null;
 				List<Integer> authorYears = getAuthorYears(sc, session);
@@ -119,15 +147,26 @@ public class DataUtils {
 				if (sc.getPreference2() == null) {
 					return defaultSortedList(criteria, sc);
 				} else {
-					// pref2 = genre
 					if (sc.getPreference2().equals(SearchCriteria.Preferences.Genre)) {
-						// TODO: group by genre, returning preferred genre on top, other genres after
-						criteria.addOrder(Property.forName("genre").asc());
-						return criteria.list();
-					} else if (sc.getPreference2().equals(SearchCriteria.Preferences.Genre)) {
 						debug(sc, "Author+Genre to be implemented.");
 					} else if (sc.getPreference2().equals(SearchCriteria.Preferences.Pages)) {
-						debug(sc, "Author+Pages to be implemented.");
+						// format genres for SQL
+						StringBuilder sbGenres = new StringBuilder();
+						for (String genre : authorGenres) {
+							sbGenres.append("'" + genre + "',");
+						}
+						String strGenres = sbGenres.substring(0, sbGenres.length()-1);
+						// build custom sql due to ABS query in select
+						StringBuilder sql = new StringBuilder();
+						sql.append("select ABS(pages - " + sc.getMaxPages() + ") AS pagediff,");
+						sql.append("ID,title,author,genre,rating, pages,year from Book");
+						sql.append(" where GENRE in (" + strGenres + ")");
+						sql.append(" and YEAR between " + minYear + " and " + maxYear);
+						sql.append(" ORDER BY pagediff asc");
+						List<Object[]> objList = session.createQuery(sql.toString()).list();
+						List<Book> books = convertToBookList(objList);
+						debug(sc,"Ordered by pages closest to " + sc.getMaxPages());
+						return books;
 					} else if (sc.getPreference2().equals(SearchCriteria.Preferences.Years)) {
 						debug(sc, "Author+Years to be implemented.");
 					}
@@ -196,6 +235,16 @@ public class DataUtils {
 		}
 		// still here? return null
 		return null;
+	}
+
+	private static List<Book> convertToBookList(List<Object[]> objList) {
+		List<Book> books = new ArrayList<Book>();
+		if (objList != null) {
+			for (Object[] objBook : objList) {
+				books.add(new Book(objBook));
+			}
+		}
+		return books;
 	}
 
 	private static List<Integer> getAuthorYears(SearchCriteria sc, Session session) {
