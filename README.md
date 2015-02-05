@@ -9,10 +9,10 @@ For other single-preference searches, the app does a simple search for that pref
  * Genre: [Suspense books](https://book-suggestion-webapp.herokuapp.com/suggestions?preference1=Genre&genre=Drama)
  * Number of Pages: [Books under 500 pages](https://book-suggestion-webapp.herokuapp.com/suggestions?preference1=Pages&minPages=0&maxPages=500)
 
-For multiple preferences, the logic is trickier, and depends on the combination of the result sets.
- * Author & Pages: [Kafka with page limit of 500](https://book-suggestion-webapp.herokuapp.com/suggestions?preference1=Author&preference2=Pages&author=Kafka&minPages=0&maxPages=400) The result set of Kafka's 3 genres and 1925-1952 is filtered to exclude books over 500 pages.
- * Author & Year: [Kafka with year of 1900](https://book-suggestion-webapp.herokuapp.com/suggestions?preference1=Author&preference2=Years&author=Kafka&minYear=1900&maxYear=1900) The result set of Kafka's 3 genres and 1925-1952 is sorted by years closest to 1900.
- * Author & Genre: [Kafka with genre of Suspense](https://book-suggestion-webapp.herokuapp.com/suggestions?preference1=Author&preference2=Genre&author=Kafka&genre=Suspense) The result set of Kafka's 3 genres and 1925-1952 is sorted first by Suspense novels, then the other genres.
+For multiple preferences, the logic is trickier, and depends on the combination of the result sets. 
+ * Author & Pages: [Kafka with page limit of 500](https://book-suggestion-webapp.herokuapp.com/suggestions?preference1=Author&preference2=Pages&author=Kafka&minPages=0&maxPages=400). The result set of Kafka's 3 genres and 1925-1952 is filtered to exclude books over 500 pages.
+ * Author & Year: [Kafka with year of 1900](https://book-suggestion-webapp.herokuapp.com/suggestions?preference1=Author&preference2=Years&author=Kafka&minYear=1900&maxYear=1900). The result set of Kafka's 3 genres and 1925-1952 is sorted by years closest to 1900.
+ * Author & Genre: [Kafka with genre of Suspense](https://book-suggestion-webapp.herokuapp.com/suggestions?preference1=Author&preference2=Genre&author=Kafka&genre=Suspense). The result set of Kafka's 3 genres and 1925-1952 is sorted first by Suspense novels, then the other genres. If the preferred genre is not one of Kafka's genres, then no results are returned.
 
 The data source currently contains only 106 books which can be [viewed here](https://book-suggestion-webapp.herokuapp.com/books).
 
