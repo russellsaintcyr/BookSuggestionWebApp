@@ -12,9 +12,9 @@ For other single-preference searches, the app does a simple search for that pref
 
 ### Multiple Preferences
 For multiple preferences the logic is trickier since it depends on the unique combination of preferences. Due to the complexity of search results, currently only two preferences are supported. 
- * Author & Pages: [Kafka with page limit of 500](https://book-suggestion-webapp.herokuapp.com/suggestions?preference1=Author&preference2=Pages&author=Kafka&minPages=0&maxPages=400). The result set of Kafka's 3 genres and 1925-1952 is filtered to exclude books over 500 pages.
- * Author & Year: Kafka with year of 1900. The result set of Kafka's 3 genres and 1925-1952 is sorted by years closest to 1900.
- * Author & Genre: Kafka with genre of Suspense. The result set of Kafka's 3 genres and 1925-1952 is sorted first by Suspense novels, then the other genres. If the preferred genre is not one of Kafka's genres, then no results are returned.
+ * Author & Pages: [Kafka with a max page of 500](https://book-suggestion-webapp.herokuapp.com/suggestions?preference1=Author&preference2=Pages&author=Kafka&minPages=0&maxPages=500). The result set of Kafka's 3 genres and 1900-1977 is sorted by pages closest to 500.
+ * Author & Year: Kafka with year of 1920. The result set of Kafka's 3 genres and 1900-1977 is sorted by years closest to 1920.
+ * Author & Genre: Kafka with genre of Suspense. The result set of Kafka's 3 genres and 1900-1977 is sorted first by Suspense novels, then the other genres. If the preferred genre is not one of Kafka's genres, then no results are returned.
  * Genre & Author: TBD 
  * Genre & Year: TBD 
  * Genre & Pages: TBD
@@ -27,7 +27,7 @@ For multiple preferences the logic is trickier since it depends on the unique co
 
 The data source currently contains only 106 books which can be [viewed here](https://book-suggestion-webapp.herokuapp.com/books).
 
-### App Technical Details
+### App Implementation Details
   * Spring MVC
   * AngularJS
   * Embedded Tomcat with tomcat7-maven-plugin
