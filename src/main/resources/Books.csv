@@ -1,0 +1,107 @@
+ID	Title	Author	Year	Genre	Pages	Rating
+8	Les Hauts de Hurlevent	Emily Brontë	1847	Action	952	4
+17	Jacques le fataliste et son maître	Denis Diderot	1796	Action	894	3
+26	Absalon, Absalon !	William Faulkner	1936	Action	158	1
+35	Les Âmes mortes	Nicolas Gogol	1842	Action	658	1
+44	Ulysse	James Joyce	1922	Action	587	5
+50	Alexis Zorba	Níkos Kazantzákis	1946	Action	478	5
+59	La Montagne magique	Thomas Mann	1924	Action	354	2
+76	Masnavî	Djalâl ad-Dîn Rûmî	1114	Action	210	4
+84	Œdipe roi	Sophocle	1622	Action	952	2
+91	Anna Karénine	Léon Tolstoï	1622	Action	658	3
+99	Mémoires d'Hadrien	Marguerite Yourcenar	1884	Action	965	3
+6	Décaméron	Boccace	1349	Adventure	158	3
+15	Divine Comédie	Dante Alighieri	1300	Adventure	658	5
+24	Homme invisible, pour qui chantes-tu ?	Ralph Ellison	1952	Adventure	587	3
+33	Épopée de Gilgamesh	Anonyme	1952	Adventure	478	5
+42	Une maison de poupée	Henrik Ibsen	1879	Adventure	354	4
+48	La Reconnaissance de Śâkuntalâ	Kâlidâsa	1985	Adventure	210	3
+57	Les Fils de la médina	Naguib Mahfouz	1959	Adventure	210	4
+66	L'Homme sans qualités	Robert Musil	1235	Adventure	258	3
+74	Gargantua et Pantagruel	François Rabelais	1235	Adventure	213	1
+82	Le Roi Lear	William Shakespeare	1608	Adventure	158	4
+89	Récits divers	Anton Tchekhov	1622	Adventure	478	5
+97	Mrs. Dalloway	Virginia Woolf	1884	Adventure	478	5
+2	Contes	Hans Christian Andersen	1835	Comedy	354	2
+11	Voyage au bout de la nuit	Louis-Ferdinand Céline	1932	Comedy	210	3
+20	L'Idiot	Fiodor Dostoïevski	1869	Comedy	210	5
+29	L'Éducation sentimentale	Gustave Flaubert	1869	Comedy	258	1
+38	La Faim	Knut Hamsun	1890	Comedy	213	5
+46	Le Procès	Franz Kafka	1925	Comedy	635	4
+53	Le Carnet d'or	Doris Lessing	1962	Comedy	623	3
+62	Essais	Michel de Montaigne	1595	Comedy	241	5
+70	Les Métamorphoses	Ovide	1955	Comedy	514	2
+78	Le Jardin des fruits	Saadi	1257	Comedy	354	3
+93	Les Aventures de Huckleberry Finn	Mark Twain	1884	Comedy	894	3
+103	Iliade4	Homère	1954	Comedy	210	3
+104	Iliade5	Homère	1952	Comedy	324	5
+105	Iliade6	Homère	1988	Comedy	210	4
+1	Le monde s'effondre	Chinua Achebe	1958	Drama	209	5
+10	Les poèmes de...	Paul Celan	1952	Drama	475	2
+19	Crime et Châtiment	Fiodor Dostoïevski	1866	Drama	784	3
+28	Madame Bovary	Gustave Flaubert	1857	Drama	952	4
+37	Diadorim (Grande Sertão: veredas)	João Guimarães Rosa	1956	Drama	894	3
+52	Les poèmes de...	Giacomo Leopardi	1818	Drama	658	1
+61	Les Mille et Une Nuits	Anonyme	1968	Drama	587	5
+69	1984	George Orwell	1955	Drama	478	4
+5	Trilogie : Molloy, Malone meurt, L'Innommable	Samuel Beckett	1951	History	241	3
+14	Nostromo	Joseph Conrad	1904	History	514	5
+23	Middlemarch	George Eliot	1871	History	368	5
+32	L'Amour aux temps du choléra	Gabriel García Márquez	1985	History	369	3
+41	Odyssée	Homère	1952	History	209	5
+56	Mahâbhârata	Anonyme	1957	History	784	5
+65	Le Dit du Genji	Murasaki Shikibu	1952	History	952	4
+73	À la recherche du temps perdu	Marcel Proust	1587	History	894	3
+81	Hamlet	William Shakespeare	1603	History	241	5
+88	Les Voyages de Gulliver	Jonathan Swift	1622	History	369	5
+96	Feuilles d'herbe	Walt Whitman	1884	History	210	2
+3	Orgueil et Préjugés	Jane Austen	1813	Horror	368	4
+12	Don Quichotte	Miguel de Cervantes	1605	Horror	369	5
+21	Les Démons	Fiodor Dostoïevski	1872	Horror	209	4
+30	Romancero gitano	Federico García Lorca	1928	Horror	475	3
+39	Le Vieil Homme et la Mer	Ernest Hemingway	1952	Horror	784	5
+54	Fifi Brindacier	Astrid Lindgren	1945	Horror	894	3
+63	La storia	Elsa Morante	1974	Horror	158	5
+71	Le Livre de l'intranquillité	Fernando Pessoa	1955	Horror	658	5
+79	Saison de la migration vers le nord	Tayeb Salih	1971	Horror	368	3
+86	Vie et opinions de Tristram Shandy, gentilhomme	Laurence Sterne	1622	Horror	475	5
+94	Rāmāyana	Valmiki	1884	Horror	213	5
+9	L'Étranger	Albert Camus	1942	Science Fiction	258	1
+18	Berlin Alexanderplatz	Alfred Döblin	1929	Science Fiction	213	5
+27	Le Bruit et la Fureur	William Faulkner	1929	Science Fiction	635	5
+36	Le Tambour	Günter Grass	1959	Science Fiction	623	2
+45	Les nouvelles de...	Franz Kafka	1952	Science Fiction	241	3
+51	Gens indépendants	Halldór Laxness	1925	Science Fiction	514	4
+60	Moby Dick	Herman Melville	1851	Science Fiction	368	3
+68	Saga de Njáll le Brûlé	Anonyme	1955	Science Fiction	369	5
+77	Les Enfants de minuit	Salman Rushdie	1981	Science Fiction	209	1
+85	Le Rouge et le Noir	Stendhal	1622	Science Fiction	258	3
+92	La Mort d'Ivan Ilitch	Léon Tolstoï	1886	Science Fiction	623	5
+4	Le Père Goriot	Honoré de Balzac	1835	Suspense	587	3
+13	Les Contes de Canterbury	Geoffrey Chaucer	1500	Suspense	478	5
+22	Les Frères Karamazov	Fiodor Dostoïevski	1880	Suspense	354	2
+31	Cent ans de solitude	Gabriel García Márquez	1967	Suspense	210	3
+40	Iliade	Homère	1952	Suspense	210	5
+47	Le Château	Franz Kafka	1926	Suspense	258	5
+55	Le Journal d'un fou	Lu Xun	1918	Suspense	213	3
+64	Beloved	Toni Morrison	1987	Suspense	635	5
+72	Les Contes d'...	Edgar Allan Poe	1955	Suspense	623	3
+80	L'Aveuglement	José Saramago	1995	Suspense	587	3
+87	La Conscience de Zeno	Italo Svevo	1622	Suspense	210	5
+95	Énéide	Virgile	1884	Suspense	784	4
+100	Iliade1	Homère	1952	Suspense	987	5
+101	Iliade2	Homère	1930	Suspense	210	2
+102	Iliade3	Homère	1972	Suspense	325	5
+106	Iliade7	Homère	1952	Suspense	410	5
+7	Fictions	Jorge Luis Borges	1944	Thriller	635	5
+16	Les Grandes Espérances	Charles Dickens	1861	Thriller	623	4
+25	Médée	Euripide	1975	Thriller	241	3
+34	Faust	Johann Wolfgang von Goethe	1808	Thriller	514	4
+43	Livre de Job	Anonyme	1952	Thriller	368	3
+49	Le Grondement de la montagne	Yasunari Kawabata	1954	Thriller	369	1
+58	Les Buddenbrook	Thomas Mann	1901	Thriller	209	1
+67	Lolita	Vladimir Nabokov	1955	Thriller	475	5
+75	Pedro Páramo	Juan Rulfo	1955	Thriller	784	5
+83	Othello ou le Maure de Venise	William Shakespeare	1622	Thriller	635	1
+90	Guerre et Paix	Léon Tolstoï	1622	Thriller	514	4
+98	La Promenade au phare	Virginia Woolf	1884	Thriller	258	3
