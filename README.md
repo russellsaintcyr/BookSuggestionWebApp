@@ -6,10 +6,13 @@ For example, users could state that they like the author Kafka, with no other pr
 
 For other single-preference searches, the app does a simple search for that preference. It would be useful to have relationships between genres, i.e. recommend Fantasy books for readers who like Science Fiction. 
  * Years: [Books from the 20th century](https://book-suggestion-webapp.herokuapp.com/suggestions?preference1=Years&minYear=1900&maxYear=2000)
- * Genre: [Suspense books](https://book-suggestion-webapp.herokuapp.com/suggestions?preference1=Genre&Drama)
- * Number of Pages: [Books under 500 pages](https://book-suggestion-webapp.herokuapp.com/suggestions?preference1=pages&minPage=0&maxPage=500)
+ * Genre: [Suspense books](https://book-suggestion-webapp.herokuapp.com/suggestions?preference1=Genre&genre=Drama)
+ * Number of Pages: [Books under 500 pages](https://book-suggestion-webapp.herokuapp.com/suggestions?preference1=Pages&minPages=0&maxPages=500)
 
-Other multiple use cases:
+For multiple preferences, the logic is trickier. TBD
+ * Author & Year
+ * Author & Genre
+ * Author & Pages
 
 Made with:
   * Spring MVC
