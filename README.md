@@ -31,4 +31,4 @@ foreman start
 ```
 Heroku URL: https://book-suggestion-webapp.herokuapp.com.
 
-The data source currently contains only 106 books.
+The data source currently contains only 106 books which can be [viewed here](https://book-suggestion-webapp.herokuapp.com/books).
