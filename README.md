@@ -14,8 +14,8 @@ For other single-preference searches, the app does a simple search for that pref
 For multiple preferences the logic is trickier since it depends on the unique combination of preferences. Due to the complexity of search results, currently only two preferences are supported. 
  * Author & Pages: [Kafka with a max page of 500](https://book-suggestion-webapp.herokuapp.com/suggestions?preference1=Author&preference2=Pages&author=Kafka&minPages=0&maxPages=500). The result set of Kafka's 3 genres and 1900-1977, sorted by pages closest to 500.
  * Author & Year: [Kafka with year of 1920](https://book-suggestion-webapp.herokuapp.com/suggestions?preference1=Author&preference2=Years&author=Kafka&minYear=1920&maxYear=1920). The result set of Kafka's 3 genres and 1900-1977, sorted by years closest to 1920.
- * Author & Genre: Kafka with genre of Suspense. The result set of Kafka's 3 genres and 1900-1977 is sorted first by Suspense novels, then the other genres. If the preferred genre is not one of Kafka's genres, then no results are returned.
- * Genre & Author: Suspense and Kafka. The user has made genre the priority, so only show that genre, not all Kafka's genres. But Kafka is a secondary preference so we filter our books from Kafka's time period. 
+ * Author & Genre: The result set of the author's genres and year range is sorted first by the selected genre, then the other genres. If the preferred genre is not one of the author's genres, then no results are returned.
+ * Genre & Author: Only show the selected genre, filtered by the author's genres and year range. Sort by rating.
  * Genre & Year: Only show the selected genre. Sort by the average of the years entered.
  * Genre & Pages: Only show the selected genre. Sort by the average of the pages entered.
  * Year & Author: Only show books in the selected year range, filtered by the author's genres and year range. Sort by rating.
