@@ -25,8 +25,8 @@ public class DataUtils {
 		try {
 			testGetSuggestions();
 			// Hibernate: select this_.ID as ID1_0_0_, this_.AUTHOR as AUTHOR2_0_0_, this_.GENRE as GENRE3_0_0_, this_.PAGES as PAGES4_0_0_, this_.RATING as RATING5_0_0_, this_.TITLE as TITLE6_0_0_, this_.YEAR as YEAR7_0_0_ from Books this_ where this_.GENRE in (?, ?, ?) and this_.YEAR between ? and ?
-			//String sql = "select ABS(pages - 500) AS pagediff,ID,title,author,genre,rating, pages,year from Book where GENRE in ('Comedy', 'Suspense', 'Science Fiction') and YEAR between 1900 and 1970 ORDER BY pagediff asc";
-			//testQuery(sql);
+			// String sql = "select ABS(pages - 500) AS diff,ID,title,author,genre,rating, pages,year from Book where GENRE in ('Comedy', 'Suspense', 'Science Fiction') and YEAR between 1900 and 1970 ORDER BY diff asc";
+			// testQuery(sql);
 		} finally {
 			// close your thread when testing!
 			HibernateUtil.shutdown();
@@ -48,11 +48,11 @@ public class DataUtils {
 
 	private static void testGetSuggestions() {
 		SearchCriteria sc = new SearchCriteria();
-		sc.setMinPages("0");
-		sc.setMaxPages("500");
+		sc.setMinYear("1920");
+		sc.setMaxYear("1940");
 		sc.setAuthor("kafka");
 		sc.setPreference1(SearchCriteria.Preferences.Author);
-		sc.setPreference2(SearchCriteria.Preferences.Pages);
+		sc.setPreference2(SearchCriteria.Preferences.Years);
 		List<Book> books = DataUtils.getSuggestions(sc);
 		if (books != null) {
 			for (Book book : books) {
@@ -133,7 +133,6 @@ public class DataUtils {
 				debug(sc, "preference1=author but author is empty");
 			} else {
 				List<String> authorGenres = getAuthorGenres(sc, session);
-				System.out.println(authorGenres);
 				// exit if no results
 				if (authorGenres.size() == 0) return null;
 				List<Integer> authorYears = getAuthorYears(sc, session);
@@ -150,25 +149,33 @@ public class DataUtils {
 					if (sc.getPreference2().equals(SearchCriteria.Preferences.Genre)) {
 						debug(sc, "Author+Genre to be implemented.");
 					} else if (sc.getPreference2().equals(SearchCriteria.Preferences.Pages)) {
-						// format genres for SQL
-						StringBuilder sbGenres = new StringBuilder();
-						for (String genre : authorGenres) {
-							sbGenres.append("'" + genre + "',");
-						}
-						String strGenres = sbGenres.substring(0, sbGenres.length()-1);
 						// build custom sql due to ABS query in select
 						StringBuilder sql = new StringBuilder();
-						sql.append("select ABS(pages - " + sc.getMaxPages() + ") AS pagediff,");
+						sql.append("select ABS(pages - " + sc.getMaxPages() + ") AS diff,");
 						sql.append("ID,title,author,genre,rating, pages,year from Book");
-						sql.append(" where GENRE in (" + strGenres + ")");
+						sql.append(" where GENRE in (" + sqlSafeList(authorGenres) + ")");
 						sql.append(" and YEAR between " + minYear + " and " + maxYear);
-						sql.append(" ORDER BY pagediff asc");
+						sql.append(" ORDER BY diff asc");
 						List<Object[]> objList = session.createQuery(sql.toString()).list();
 						List<Book> books = convertToBookList(objList);
 						debug(sc,"Ordered by pages closest to " + sc.getMaxPages());
 						return books;
 					} else if (sc.getPreference2().equals(SearchCriteria.Preferences.Years)) {
-						debug(sc, "Author+Years to be implemented.");
+						// get difference between year range
+						int yearMiddle = (sc.getMinYear() != sc.getMaxYear()) ?
+								(Integer.parseInt(sc.getMinYear()) + Integer.parseInt(sc.getMaxYear()))/2 : 
+									Integer.parseInt(sc.getMaxYear());
+						// build custom sql due to ABS query in select
+						StringBuilder sql = new StringBuilder();
+						sql.append("select ABS(year - " + yearMiddle + ") AS diff,");
+						sql.append("ID,title,author,genre,rating, pages,year from Book");
+						sql.append(" where GENRE in (" + sqlSafeList(authorGenres) + ")");
+						sql.append(" and YEAR between " + minYear + " and " + maxYear);
+						sql.append(" ORDER BY diff asc");
+						List<Object[]> objList = session.createQuery(sql.toString()).list();
+						List<Book> books = convertToBookList(objList);
+						debug(sc,"Ordered by years closest to " + yearMiddle);
+						return books;
 					}
 				}
 			}
@@ -235,6 +242,14 @@ public class DataUtils {
 		}
 		// still here? return null
 		return null;
+	}
+
+	private static String sqlSafeList(List<String> list) {
+		StringBuilder sb = new StringBuilder();
+		for (String genre : list) {
+			sb.append("'" + genre + "',");
+		}
+		return sb.substring(0, sb.length()-1);
 	}
 
 	private static List<Book> convertToBookList(List<Object[]> objList) {

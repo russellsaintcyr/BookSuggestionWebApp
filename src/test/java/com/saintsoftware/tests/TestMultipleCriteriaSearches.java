@@ -42,6 +42,17 @@ public class TestMultipleCriteriaSearches {
 		.andExpect(model().attribute("books", Matchers.hasSize(22)));
     }
 
+	/**
+	 * 22 books returned.
+	 */
+    @Test
+    public void authorAndYear() throws Exception {
+    	// TODO: check that top result is Franz Kafka, Le Procès
+		mockMvc.perform(post("/suggestions?preference1=Author&preference2=Year&author=Kafka&maxYear=1920"))
+        .andExpect(status().isOk())
+		.andExpect(model().attribute("books", Matchers.hasSize(22)));
+    }
+
     /**
 	 * kafka genres: [Comedy, Suspense, Science Fiction]
 	 * kafka years with 25y offset: min=1900; max=1977
