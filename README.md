@@ -17,7 +17,6 @@ For multiple preferences the logic is trickier since it depends on the unique co
  * **Author & Genre**: The result set of the author's genres and year range, sorted first by the selected genre, then the other genres. If the preferred genre is not one of the author's genres, then no results are returned.
  * **Genre & Author**: Only show the selected genre, filtered by the author's genres and year range. Sort by rating.
  * **Pages & Author**: Only show books in the selected page range, filtered by the author's genres and year range. Sort by rating.
-
  * **Year & Author**: Only show books in the selected year range, filtered by the author's genres and year range. Sort by rating.
  * **Genre & Year**, **Year & Genre**: Only show books in the selected year range and genre. Sort by rating.
  * **Genre & Pages**, **Pages & Genre**: Only show the selected genre within the page count entered. Sort by rating.
