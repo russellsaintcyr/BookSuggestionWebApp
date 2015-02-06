@@ -26,7 +26,7 @@ public class DataUtils {
 			testGetSuggestions();
 			// Hibernate: select this_.ID as ID1_0_0_, this_.AUTHOR as AUTHOR2_0_0_, this_.GENRE as GENRE3_0_0_, this_.PAGES as PAGES4_0_0_, this_.RATING as RATING5_0_0_, this_.TITLE as TITLE6_0_0_, this_.YEAR as YEAR7_0_0_ from Books this_ where this_.GENRE in (?, ?, ?) and this_.YEAR between ? and ?
 			// String sql = "select ABS(pages - 500) AS diff,ID,title,author,genre,rating, pages,year from Book where GENRE in ('Comedy', 'Suspense', 'Science Fiction') and YEAR between 1900 and 1970 ORDER BY diff asc";
-			// testQuery(sql);
+			// utils.testQuery(sql);
 		} finally {
 			// close your thread when testing!
 			HibernateUtil.shutdown();
@@ -34,7 +34,7 @@ public class DataUtils {
 	}
 
 	@SuppressWarnings("unused")
-	private static void testQuery(String qs) {
+	private void testQuery(String qs) {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		List<Object[]> results = session.createQuery(qs).list();
 		List<Book> books = convertToBookList(results);
@@ -48,12 +48,12 @@ public class DataUtils {
 
 	private static void testGetSuggestions() {
 		SearchCriteria sc = new SearchCriteria();
-		sc.setMinYear("1920");
-		sc.setMaxYear("1940");
-		sc.setAuthor("kafka");
-		sc.setPreference1(SearchCriteria.Preferences.Author);
-		sc.setPreference2(SearchCriteria.Preferences.Years);
-		List<Book> books = DataUtils.getSuggestions(sc);
+		sc.setPreference1(SearchCriteria.Preferences.Genre);
+		//sc.setPreference2(SearchCriteria.Preferences.Pages);
+		//sc.setMinPages("800");
+		//sc.setMaxPages("500");
+		sc.setGenre(Book.GENRES.Science_Fiction.toString());
+		List<Book> books = getSuggestions(sc);
 		if (books != null) {
 			for (Book book : books) {
 				logger.debug(book.toString());
@@ -72,26 +72,12 @@ public class DataUtils {
 		List<Book> books = null;
 		try {
 			Criteria criteria = session.createCriteria(Book.class);
-			// filter by author and genre
-			if (sc.getAuthor() != null && !sc.getAuthor().trim().equals("")) 
-				criteria.add(Restrictions.like("author", "%" + sc.getAuthor() + "%").ignoreCase());
-			if (sc.getGenre() != null  && !sc.getGenre().trim().equals("")) 
-				criteria.add(Restrictions.eq("genre", sc.getGenre()));
-			// filter by rating
-			if (sc.getMinRating() != null && !sc.getMinRating().trim().equals("")) 
-				criteria.add( Restrictions.ge("rating", Integer.parseInt(sc.getMinRating())));
-			if (sc.getMaxRating() != null && !sc.getMaxRating().trim().equals("")) 
-				criteria.add( Restrictions.le("rating", Integer.parseInt(sc.getMaxRating())));
-			// filter by years
-			if (sc.getMinYear() != null && !sc.getMinYear().trim().equals("")) 
-				criteria.add( Restrictions.ge("year", Integer.parseInt(sc.getMinYear())));
-			if (sc.getMaxYear() != null && !sc.getMaxYear().trim().equals("")) 
-				criteria.add( Restrictions.le("year", Integer.parseInt(sc.getMaxYear())));
-			// filter by page count
-			if (sc.getMinPages() != null  && !sc.getMinPages().trim().equals("")) 
-				criteria.add( Restrictions.ge("pages", Integer.parseInt(sc.getMinPages())));
-			if (sc.getMaxPages() != null  && !sc.getMaxPages().trim().equals("")) 
-				criteria.add( Restrictions.le("pages", Integer.parseInt(sc.getMaxPages())));
+			// add the search criteria
+			addCriteriaAuthor(criteria, sc);
+			addCriteriaGenre(criteria, sc);
+			addCriteriaRating(criteria, sc);
+			addCriteriaYears(criteria, sc);
+			addCriteriaPages(criteria, sc);
 			// order and return results
 			books = defaultSortedList(criteria, sc);
 		} catch (Exception e) {
@@ -136,12 +122,12 @@ public class DataUtils {
 				// exit if no results
 				if (authorGenres.size() == 0) return null;
 				List<Integer> authorYears = getAuthorYears(sc, session);
-				int minYear = Collections.min(authorYears) - yearOffset; 
-				int maxYear = Collections.max(authorYears) + yearOffset;
-				debug(sc, "Author years with " + yearOffset + "-year offset: " + "min=" + minYear + ", max=" + maxYear);
+				int authorMinYear = Collections.min(authorYears) - yearOffset; 
+				int authorMaxYear = Collections.max(authorYears) + yearOffset;
+				debug(sc, "Author years with " + yearOffset + "-year offset: " + "min=" + authorMinYear + ", max=" + authorMaxYear);
 				// start filtering the data
 				criteria.add(Restrictions.in("genre", authorGenres));
-				criteria.add(Restrictions.between("year", minYear, maxYear));
+				criteria.add(Restrictions.between("year", authorMinYear, authorMaxYear));
 				// handle single criteria search
 				if (sc.getPreference2() == null) {
 					return defaultSortedList(criteria, sc);
@@ -149,33 +135,33 @@ public class DataUtils {
 					if (sc.getPreference2().equals(SearchCriteria.Preferences.Genre)) {
 						debug(sc, "Author+Genre to be implemented.");
 					} else if (sc.getPreference2().equals(SearchCriteria.Preferences.Pages)) {
-						// build custom sql due to ABS query in select
-						StringBuilder sql = new StringBuilder();
-						sql.append("select ABS(pages - " + sc.getMaxPages() + ") AS diff,");
-						sql.append("ID,title,author,genre,rating, pages,year from Book");
-						sql.append(" where GENRE in (" + sqlSafeList(authorGenres) + ")");
-						sql.append(" and YEAR between " + minYear + " and " + maxYear);
-						sql.append(" ORDER BY diff asc");
-						List<Object[]> objList = session.createQuery(sql.toString()).list();
-						List<Book> books = convertToBookList(objList);
+						// build custom sql due to ABS() query in select
+						List<Book> books = getCustomQueryList("pages", Integer.parseInt(sc.getMaxPages()), 
+								authorGenres, authorMinYear, authorMaxYear, session);
 						debug(sc,"Ordered by pages closest to " + sc.getMaxPages());
 						return books;
 					} else if (sc.getPreference2().equals(SearchCriteria.Preferences.Years)) {
-						// get difference between year range
-						int yearMiddle = (sc.getMinYear() != sc.getMaxYear()) ?
-								(Integer.parseInt(sc.getMinYear()) + Integer.parseInt(sc.getMaxYear()))/2 : 
-									Integer.parseInt(sc.getMaxYear());
-						// build custom sql due to ABS query in select
-						StringBuilder sql = new StringBuilder();
-						sql.append("select ABS(year - " + yearMiddle + ") AS diff,");
-						sql.append("ID,title,author,genre,rating, pages,year from Book");
-						sql.append(" where GENRE in (" + sqlSafeList(authorGenres) + ")");
-						sql.append(" and YEAR between " + minYear + " and " + maxYear);
-						sql.append(" ORDER BY diff asc");
-						List<Object[]> objList = session.createQuery(sql.toString()).list();
-						List<Book> books = convertToBookList(objList);
-						debug(sc,"Ordered by years closest to " + yearMiddle);
-						return books;
+						// ensure we have at least 1 year
+						if (sc.getMinYear() == null && sc.getMaxYear() == null) { 
+							debug(sc, "getMinYear and getMaxYear are null");
+						} else {
+							// if we have min and max years, get difference between year range
+							int yearMiddle = 0;
+							if (sc.getMinYear() != null && !sc.getMinYear().trim().equals("") 
+									&& sc.getMaxYear() != null && !sc.getMaxYear().trim().equals("")) {
+								yearMiddle = Integer.parseInt(sc.getMinYear()) + Integer.parseInt(sc.getMaxYear())/2;
+							// otherwise just use the single min or max year
+							} else if (sc.getMinYear() != null && !sc.getMinYear().trim().equals("")) {
+								yearMiddle = Integer.parseInt(sc.getMinYear());
+							} else if (sc.getMaxYear() != null && !sc.getMaxYear().trim().equals("")) {
+								yearMiddle = Integer.parseInt(sc.getMaxYear());
+							}
+							// build custom sql due to ABS() query in select
+							List<Book> books = getCustomQueryList("year", yearMiddle, authorGenres, authorMinYear, 
+									authorMaxYear, session);
+							debug(sc,"Ordered by years closest to " + yearMiddle);
+							return books;
+						}
 					}
 				}
 			}
@@ -185,58 +171,51 @@ public class DataUtils {
 			if (sc.getGenre() == null || sc.getGenre().trim().equals("")) {
 				debug(sc, "preference1=genre but genre is empty");
 			} else {
-				criteria.add(Restrictions.eq("genre", sc.getGenre()));
 				// handle single criteria search
 				if (sc.getPreference2() == null) {
+					addCriteriaGenre(criteria, sc);
 					return defaultSortedList(criteria, sc);
 				} else if (sc.getPreference2().equals(SearchCriteria.Preferences.Author)) {
 					debug(sc, "Genre+Author to be implemented.");
 				} else if (sc.getPreference2().equals(SearchCriteria.Preferences.Pages)) {
-					debug(sc, "Genre+Pages to be implemented.");
+					return getPagesAndGenre(criteria, sc);
 				} else if (sc.getPreference2().equals(SearchCriteria.Preferences.Years)) {
-					debug(sc, "Genre+Years to be implemented.");
+					return getYearAndGenre(criteria, sc);
 				}
 			}
 		// Pages = highest priority
 		} else if (sc.getPreference1().equals(SearchCriteria.Preferences.Pages)) {
 			// ensure we have search data
-			if (sc.getMinPages() == null || sc.getMinPages().trim().equals("")) {
-				debug(sc, "preference1=Pages but minPage is empty");
-			} else if (sc.getMaxPages() == null || sc.getMaxPages().trim().equals("")) {
-				debug(sc, "preference1=Pages but maxPage is empty");
+			if (sc.getMinPages() == null && sc.getMaxPages() == null) {
+				debug(sc, "preference1=Pages but minPage and maxPage are empty");
 			} else {
-				criteria.add(Restrictions.between("pages", Integer.parseInt(sc.getMinPages()), 
-						Integer.parseInt(sc.getMaxPages())));
-				// handle single criteria search
 				if (sc.getPreference2() == null) {
+					addCriteriaPages(criteria, sc);
 					return defaultSortedList(criteria, sc);
 				} else if (sc.getPreference2().equals(SearchCriteria.Preferences.Author)) {
 					debug(sc, "Pages+Author to be implemented.");
 				} else if (sc.getPreference2().equals(SearchCriteria.Preferences.Years)) {
-					debug(sc, "Pages+Years to be implemented.");
+					return getYearAndPages(criteria, sc);
 				} else if (sc.getPreference2().equals(SearchCriteria.Preferences.Genre)) {
-					debug(sc, "Pages+Genre to be implemented.");
+					return getPagesAndGenre(criteria, sc);
 				}
 			}
 		// Years = highest priority
 		} else if (sc.getPreference1().equals(SearchCriteria.Preferences.Years)) {
 			// ensure we have search data
-			if (sc.getMinYear() == null || sc.getMinYear().trim().equals("")) {
-				debug(sc, "preference1=year but minYear is empty");
-			} else if (sc.getMaxYear() == null || sc.getMaxYear().trim().equals("")) {
-				debug(sc, "preference1=year but maxYear is empty");
+			if (sc.getMinYear() == null && sc.getMaxYear() == null) {
+				debug(sc, "preference1=year but minYear and maxYear are empty");
 			} else {
-				criteria.add(Restrictions.between("year", Integer.parseInt(sc.getMinYear()), 
-						Integer.parseInt(sc.getMaxYear())));
 				// handle single criteria search
 				if (sc.getPreference2() == null) {
+					addCriteriaYears(criteria, sc);
 					return defaultSortedList(criteria, sc);
 				} else if (sc.getPreference2().equals(SearchCriteria.Preferences.Author)) {
 					debug(sc, "Year+Author to be implemented.");
 				} else if (sc.getPreference2().equals(SearchCriteria.Preferences.Pages)) {
-					debug(sc, "Year+Pages to be implemented.");
+					return getYearAndPages(criteria, sc);
 				} else if (sc.getPreference2().equals(SearchCriteria.Preferences.Genre)) {
-					debug(sc, "Year+Genre to be implemented.");
+					return getYearAndGenre(criteria, sc);
 				}
 			}
 		}
@@ -244,6 +223,94 @@ public class DataUtils {
 		return null;
 	}
 
+	private static void addCriteriaGenre(Criteria criteria, SearchCriteria sc) {
+		if (sc.getGenre() != null  && !sc.getGenre().trim().equals("")) {
+			// replace any underscores in the enum name
+			String genre = sc.getGenre().replaceAll("_", " ");
+			criteria.add(Restrictions.eq("genre", genre));
+		}
+	}
+
+	private static void addCriteriaAuthor(Criteria criteria, SearchCriteria sc) {
+		if (sc.getAuthor() != null && !sc.getAuthor().trim().equals("")) 
+			criteria.add(Restrictions.like("author", "%" + sc.getAuthor() + "%").ignoreCase());
+	}
+
+	private static void addCriteriaRating(Criteria criteria, SearchCriteria sc) {
+		if (sc.getMinRating() != null && !sc.getMinRating().trim().equals("")) 
+			criteria.add( Restrictions.ge("rating", Integer.parseInt(sc.getMinRating())));
+		if (sc.getMaxRating() != null && !sc.getMaxRating().trim().equals("")) 
+			criteria.add( Restrictions.le("rating", Integer.parseInt(sc.getMaxRating())));
+	}
+
+	private static void addCriteriaPages(Criteria criteria, SearchCriteria sc) {
+		if (sc.getMinPages() != null && !sc.getMinPages().trim().equals(""))
+			criteria.add(Restrictions.ge("pages", Integer.parseInt(sc.getMinPages())));
+		if (sc.getMaxPages() != null && !sc.getMaxPages().trim().equals(""))
+			criteria.add(Restrictions.le("pages", Integer.parseInt(sc.getMaxPages())));
+	}
+	
+	private static void addCriteriaYears(Criteria criteria, SearchCriteria sc) {
+		if (sc.getMinYear() != null && !sc.getMinYear().trim().equals(""))
+			criteria.add(Restrictions.ge("year", Integer.parseInt(sc.getMinYear())));
+		if (sc.getMaxYear() != null && !sc.getMaxYear().trim().equals(""))
+			criteria.add(Restrictions.le("year", Integer.parseInt(sc.getMaxYear())));
+	}
+
+	private static List<Book> getPagesAndGenre(Criteria criteria, SearchCriteria sc) {
+		if (sc.getGenre() == null) { 
+			debug(sc, "getGenre is null");
+		} else if (sc.getMinPages() == null && sc.getMaxPages() == null) { 
+			debug(sc, "getMinPages and getMaxPages are null");
+		} else {
+			addCriteriaGenre(criteria, sc);
+			addCriteriaPages(criteria, sc);
+			return defaultSortedList(criteria, sc);
+		}
+		return null;
+	}
+
+	private static List<Book> getYearAndPages(Criteria criteria, SearchCriteria sc) {
+		if (sc.getMinYear() == null && sc.getMaxYear() == null) { 
+			debug(sc, "getMinYear and getMaxYear are null");
+		} else if (sc.getMinPages() == null && sc.getMaxPages() == null) { 
+			debug(sc, "getMinPages and getMaxPages are null");
+		} else {
+			addCriteriaPages(criteria, sc);
+			addCriteriaYears(criteria, sc);
+			return defaultSortedList(criteria, sc);
+		}
+		return null;
+	}
+
+	private static List<Book> getYearAndGenre(Criteria criteria, SearchCriteria sc) {
+		if (sc.getMinYear() == null && sc.getMaxYear() == null) { 
+			debug(sc, "getMinYear and getMaxYear are null");
+		} else if (sc.getGenre() == null) { 
+			debug(sc, "getGenre is null");
+		} else {
+			addCriteriaGenre(criteria, sc);
+			addCriteriaYears(criteria, sc);
+			return defaultSortedList(criteria, sc);
+		}
+		return null;
+	}
+
+	/*
+	 * For use when called by functions where author is most important preference
+	 * */
+	private static List<Book> getCustomQueryList(String diffField, int diffValue, List<String> authorGenres, 
+			int authorMinYear, int authorMaxYear, Session session) {
+		StringBuilder sql = new StringBuilder();
+		sql.append("select ABS(" + diffField + " - " + diffValue + ") AS diff,");
+		sql.append("ID,title,author,genre,rating, pages,year from Book");
+		sql.append(" where GENRE in (" + sqlSafeList(authorGenres) + ")");
+		sql.append(" and YEAR between " + authorMinYear + " and " + authorMaxYear);
+		sql.append(" ORDER BY diff asc");
+		List<Object[]> objList = session.createQuery(sql.toString()).list();
+		List<Book> books = convertToBookList(objList);
+		return books;
+	}
 	private static String sqlSafeList(List<String> list) {
 		StringBuilder sb = new StringBuilder();
 		for (String genre : list) {

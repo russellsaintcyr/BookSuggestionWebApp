@@ -48,7 +48,7 @@ public class TestMultipleCriteriaSearches {
     @Test
     public void authorAndYear() throws Exception {
     	// TODO: check that top result is Franz Kafka, Le Procès
-		mockMvc.perform(post("/suggestions?preference1=Author&preference2=Year&author=Kafka&maxYear=1920"))
+		mockMvc.perform(post("/suggestions?preference1=Author&preference2=Years&author=Kafka&maxYear=1920"))
         .andExpect(status().isOk())
 		.andExpect(model().attribute("books", Matchers.hasSize(22)));
     }

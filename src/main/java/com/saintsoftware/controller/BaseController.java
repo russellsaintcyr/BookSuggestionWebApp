@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.saintsoftware.model.Book;
+import com.saintsoftware.model.Book.GENRES;
 import com.saintsoftware.model.SearchCriteria;
 import com.saintsoftware.tools.DataUtils;
 
