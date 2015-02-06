@@ -16,13 +16,11 @@ For multiple preferences the logic is trickier since it depends on the unique co
  * **Author & Year**: The result set of the author's genres and year range, sorted by pages closest to the average of the years entered. Example: [Kafka with year of 1920](https://book-suggestion-webapp.herokuapp.com/suggestions?preference1=Author&preference2=Years&author=Kafka&minYear=1920&maxYear=1920)
  * **Author & Genre**: The result set of the author's genres and year range, sorted first by the selected genre, then the other genres. If the preferred genre is not one of the author's genres, then no results are returned.
  * **Genre & Author**: Only show the selected genre, filtered by the author's genres and year range. Sort by rating.
- * **Genre & Year**: Only show the selected genre. Sort by the average of the years entered.
- * **Genre & Pages**: Only show the selected genre. Sort by the average of the pages entered.
+ * **Genre & Year**, **Year & Genre**: Only show books in the selected year range and genre. Sort by rating.
+ * **Genre & Pages**, **Pages & Genre**: Only show the selected genre within the page count entered. Sort by rating.
  * **Year & Author**: Only show books in the selected year range, filtered by the author's genres and year range. Sort by rating.
- * **Year & Genre**: Only show books in the selected year range, filtered by selected genre. Sort by rating.
  * **Year & Pages**: Only show books in the selected year range. Sort by the average of the pages entered.
  * **Pages & Year**: Only show books in the selected page range. Sort by the average of the years entered.
- * **Pages & Genre**: Only show books in the selected page range, filtered by selected genre. Sort by rating.
  * **Pages & Author**: Only show books in the selected page range, filtered by the author's genres and year range. Sort by rating.
 
 The data source currently contains only 106 books which can be [viewed here](https://book-suggestion-webapp.herokuapp.com/books).
