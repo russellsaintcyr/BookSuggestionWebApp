@@ -19,7 +19,7 @@ For multiple preferences the logic is trickier since it depends on the unique co
  * **Pages & Author**: Only show books in the selected page range, filtered by the author's genres and year range. Sort by rating.
  * **Year & Author**: Only show books in the selected year range, filtered by the author's genres and year range. Sort by rating.
  * **Genre & Year**, **Year & Genre**: Only show books in the selected year range and genre. Sort by rating. Example: [Drama from the 20th century](https://book-suggestion-webapp.herokuapp.com/suggestions?preference1=Years&preference2=Genre&genre=Drama&minYear=1900&maxYear=2000)
- * **Genre & Pages**, **Pages & Genre**: Only show the selected genre within the page count entered. Sort by rating.
+ * **Genre & Pages**, **Pages & Genre**: Only show the selected genre within the page count entered. Sort by rating. Example: [Action books less than 400 pages](https://book-suggestion-webapp.herokuapp.com/suggestions?preference1=Genre&preference2=Pages&author=&genre=Action&maxPages=400)
  * **Year & Pages**, **Pages & Year**: Only show books in the selected year range within the page count entered. Sort by rating.
 
 The data source currently contains only 106 books which can be [viewed here](https://book-suggestion-webapp.herokuapp.com/books).
